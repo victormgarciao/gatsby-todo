@@ -14,12 +14,17 @@ const TodoListItem = (props) => {
 
   const [, globalActions] = useGlobal()
 
-  const handleClick = () => globalActions.removeTodo(id);
+  const tickTodo = () => globalActions.tickTodo(id)
 
+  const removeTodo = () => globalActions.removeTodo(id);
 
   return (
-    <Segment style={{ margin: `0.5rem` }}>
+    <Segment
+      style={{ margin: `0.5rem`, cursor: `pointer` }}
+      onClick={tickTodo}
+    >
       <List.Item
+        // onClick={tickTodo}
         style={{
           display: `flex`,
           justifyContent: `space-between`,
@@ -32,7 +37,7 @@ const TodoListItem = (props) => {
         />
         <Button
           content="delete"
-          onClick={handleClick}
+          onClick={removeTodo}
           color="red"
         />
       </List.Item>

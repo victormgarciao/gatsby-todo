@@ -12,7 +12,7 @@ export const removeTodo = (store, id) => {
 
 export const tickTodo = (store, id) => {
     const todos = store.state.todos.filter((todo) => {
-        if (todo.id !== id)
+        if (todo.id === id)
             todo.isChecked = !todo.isChecked
         
         return todo

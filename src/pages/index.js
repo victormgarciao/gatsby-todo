@@ -7,33 +7,22 @@ import SEO from "../components/seo"
 import TodoList from "../components/molecules/TodoList/todoList";
 import AddTodoInput from "../components/molecules/AddTodoInput/addTodoInput";
 import { Segment } from "semantic-ui-react";
+import useGlobal from "../store/store";
 
-const todos = [
-  {
-    description: 'Apples',
-    isChecked: false,
-  },
-  {
-    description: 'Pears',
-    isChecked: true,
-  },
-  {
-    description: 'Bananas',
-    isChecked: false,
-  },
-];
-
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>ToDos</h1>
-    <p>Add and remove some ToDos.</p>
-    <Segment>
-      <AddTodoInput />
-      <TodoList todos={todos} />
-    </Segment>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+const IndexPage = () => {
+  const [globalState] = useGlobal()
+  return (
+    <Layout>
+      <SEO title="Home" />
+      <h1>ToDos</h1>
+      <p>Add and remove some ToDos.</p>
+      <Segment>
+        <AddTodoInput />
+        <TodoList todos={globalState.todos} />
+      </Segment>
+      <Link to="/page-2/">Go to page 2</Link>
+    </Layout>
+  )
+}
 
 export default IndexPage

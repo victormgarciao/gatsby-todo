@@ -6,10 +6,11 @@ import TodoListItem from '../TodoListItem/todoListItem';
 import { generateString } from '../../../utils/global';
 
 const TodoList = ({todos}) => {
-  const createTodoList = ({description, isChecked}) => (
+  const createTodoList = ({description, isChecked, id}) => (
     <TodoListItem 
       description={description}
       isChecked={isChecked}
+      id={id}
       key={generateString()}
     />
   )

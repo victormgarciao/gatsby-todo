@@ -10,6 +10,8 @@ class InputWithButton extends Component {
             buttonContent = 'focus',
             placeholder = 'Search...',
             handleClick = this.handleClick,
+            onInputChange = null,
+            inputValue = '',
         } = this.props
         
         return (
@@ -24,6 +26,8 @@ class InputWithButton extends Component {
                 <Input
                     ref={this.inputRef}
                     placeholder={placeholder}
+                    value={inputValue}
+                    onChange={onInputChange}
                     style={{ width: `100%` }}
                 />
                 <Button 

@@ -1,6 +1,6 @@
 import { useStaticQuery, graphql } from "gatsby";
 
-export const getTodosData = () => useStaticQuery(graphql`
+const fetchTodosData = () => useStaticQuery(graphql`
     query TodosQuery {
         allMongodbGatsbytododbTodos {
             nodes {
@@ -11,3 +11,10 @@ export const getTodosData = () => useStaticQuery(graphql`
         }
     }
 `)
+
+export const fetchTodos = () => {
+    const data = fetchTodosData()
+    const todos = data.allMongodbGatsbytododbTodos.nodes
+
+    return todos;
+}

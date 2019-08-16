@@ -1,13 +1,12 @@
 import React from 'react'
 
 import TodoList from '../../../components/molecules/TodoList/todoList';
-import { getTodosData } from './queries';
+import useGlobal from '../../../store/store';
 
 const TodoListContainer = () => {
-    const data = getTodosData();
-    const todos = data.allMongodbGatsbytododbTodos.nodes;
+    const [globalState] = useGlobal()
 
-    return  <TodoList todos={todos} />
+    return  <TodoList todos={globalState.todos.todoList} />
 }
 
 export default TodoListContainer

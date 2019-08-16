@@ -2,27 +2,13 @@
 import React from "react";
 import useGlobalHook from "use-global-hook";
 
-import { actions } from "../actions/index";
-import { generateString } from "../utils/global";
+import { actions } from "../actions/index.actions";
 
 const initialState = {
-    todos: [
-        {
-            description: 'Apples',
-            isChecked: false,
-            id: generateString(),
-        },
-        {
-            description: 'Pears',
-            isChecked: true,
-            id: generateString(),
-        },
-        {
-            description: 'Bananas',
-            isChecked: false,
-            id: generateString(),
-        },
-    ],
+    todos: {
+        isFetched: false,
+        todoList: [],
+    },
 }
 
 const useGlobal = useGlobalHook(React, initialState, actions);

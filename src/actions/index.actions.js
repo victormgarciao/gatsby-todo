@@ -1,4 +1,4 @@
-import * as todoActions from './todos'
+import * as todoActions from './todos.actions'
 
 export const actions = {
     ...todoActions,

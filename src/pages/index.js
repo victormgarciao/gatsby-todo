@@ -7,8 +7,18 @@ import Layout from "../components/molecules/Layout/layout"
 import SEO from "../components/atoms/Seo/seo"
 import AddTodoInputContainer from "../containers/molecules/AddTodoInput/addTodoInput.container";
 import TodoListContainer from "../containers/molecules/TodoList/todoList.container";
+import useGlobal from "../store/store";
+
+const initApp = () => {
+  const [globalState, globalActions] = useGlobal()
+
+  if (!globalState.todos.isFetched)
+    globalActions.initTodos()
+}
 
 const IndexPage = () => {
+  initApp()
+
   return (
     <Layout>
       <SEO title="Home" />

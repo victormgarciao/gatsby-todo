@@ -2,10 +2,10 @@ import React from "react"
 import { Link } from "gatsby"
 import 'semantic-ui-css/semantic.min.css'
 
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Layout from "../components/molecules/Layout/layout"
+import SEO from "../components/atoms/Seo/seo"
 import TodoList from "../components/molecules/TodoList/todoList";
-import AddTodoInput from "../components/molecules/AddTodoInput/addTodoInput";
+import AddTodoInputContainer from "../containers/molecules/AddTodoInput/addTodoInput.container";
 import { Segment } from "semantic-ui-react";
 import useGlobal from "../store/store";
 
@@ -17,7 +17,7 @@ const IndexPage = () => {
       <h1>ToDos</h1>
       <p>Add and remove some ToDos.</p>
       <Segment>
-        <AddTodoInput />
+        <AddTodoInputContainer />
         <TodoList todos={globalState.todos} />
       </Segment>
       <Link to="/page-2/">Go to page 2</Link>

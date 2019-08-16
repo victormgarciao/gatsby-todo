@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import InputWithButton from '../InputWithButton/inputWithButton';
+import InputWithButton from '../../../components/molecules/InputWithButton/inputWithButton';
 import useGlobal from '../../../store/store';
 import { generateString } from '../../../utils/global';
 
-const AddTodoInput = () => {
+const AddTodoInputContainer = () => {
     const [, globalActions] = useGlobal()
 
     const [input, updateInput] = useState('')
@@ -35,4 +35,4 @@ const AddTodoInput = () => {
     )
 }
 
-export default AddTodoInput
+export default AddTodoInputContainer

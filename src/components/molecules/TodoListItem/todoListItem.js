@@ -3,33 +3,25 @@ import PropTypes from "prop-types"
 
 import { List, Segment, Button } from 'semantic-ui-react'
 import Checkbox from '../../atoms/Checkbox/checkbox';
-import useGlobal from '../../../store/store';
+import { getStyles } from './styles';
 
 const TodoListItem = (props) => {
   const {
     description,
     isChecked,
-    id,
+    tickTodo,
+    removeTodo,
   } = props
 
-  const [, globalActions] = useGlobal()
-
-  const tickTodo = () => globalActions.tickTodo(id)
-
-  const removeTodo = () => globalActions.removeTodo(id);
+  const computedStyles = getStyles()
 
   return (
     <Segment
-      style={{ margin: `0.5rem`, cursor: `pointer` }}
+      style={computedStyles.segment}
       onClick={tickTodo}
     >
       <List.Item
-        // onClick={tickTodo}
-        style={{
-          display: `flex`,
-          justifyContent: `space-between`,
-          alignItems: `center`,
-        }}
+        style={computedStyles.listItem}
       >
         <Checkbox
           label={description}

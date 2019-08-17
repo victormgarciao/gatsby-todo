@@ -42,4 +42,6 @@ export default TodoListItem
 TodoListItem.propTypes = {
   description: PropTypes.string.isRequired,
   isChecked: PropTypes.bool,
+  tickTodo: PropTypes.func,
+  removeTodo: PropTypes.func,
 }

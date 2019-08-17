@@ -6,19 +6,12 @@ import useGlobal from '../../../store/store';
 import TodoListItem from '../../../components/molecules/TodoListItem/todoListItem'
 import { getTodoContent } from '../../../queries/todos.queries';
 
-const TodoListItemContainer = (props) => {
-  const {
-    id,
-  } = props
-
+const TodoListItemContainer = ({ id }) => {
   const [, globalActions] = useGlobal()
 
   const { loading, error, data } = getTodoContent(id);
   const {
-    mongodbGatsbytododbTodos: {
-      description,
-      isChecked,
-    } = {
+    mongodbGatsbytododbTodos: { description, isChecked } = {
       description: '',
       isChecked: false
     }
@@ -34,7 +27,6 @@ const TodoListItemContainer = (props) => {
     <TodoListItem 
         description={description}
         isChecked={isChecked}
-        id={id}
         tickTodo={tickTodo}
         removeTodo={removeTodo}
     />

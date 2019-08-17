@@ -4,18 +4,30 @@ import PropTypes from "prop-types"
 import useGlobal from '../../../store/store';
 
 import TodoListItem from '../../../components/molecules/TodoListItem/todoListItem'
+import { getTodoContent } from '../../../queries/todos.queries';
 
 const TodoListItemContainer = (props) => {
   const {
-    description,
-    isChecked,
     id,
   } = props
 
   const [, globalActions] = useGlobal()
 
-  const tickTodo = () => globalActions.tickTodo(id)
+  const { loading, error, data } = getTodoContent(id);
+  const {
+    mongodbGatsbytododbTodos: {
+      description,
+      isChecked,
+    } = {
+      description: '',
+      isChecked: false
+    }
+  } = data
+    
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
 
+  const tickTodo = () => globalActions.tickTodo(id)
   const removeTodo = () => globalActions.removeTodo(id);
 
   return (
@@ -32,6 +44,5 @@ const TodoListItemContainer = (props) => {
 export default TodoListItemContainer
 
 TodoListItemContainer.propTypes = {
-  description: PropTypes.string.isRequired,
-  isChecked: PropTypes.bool,
+  id: PropTypes.string.isRequired,
 }

@@ -6,18 +6,13 @@ import TodoListItemContainer from '../../../containers/molecules/TodoListItem/to
 import { generateString } from '../../../utils/global';
 
 const TodoList = ({todos}) => {
-  const createTodoList = ({description, isChecked, id}) => (
-    <TodoListItemContainer
-      description={description}
-      isChecked={isChecked}
-      id={id}
-      key={generateString()}
-    />
+  const createTodoListItem = ({ id }) => (
+    <TodoListItemContainer id={id} key={generateString()} />
   )
 
   return (
     <List>
-      {todos.map((todo) => createTodoList(todo))}
+      {todos.map((todo) => createTodoListItem(todo))}
     </List>
   )
 }

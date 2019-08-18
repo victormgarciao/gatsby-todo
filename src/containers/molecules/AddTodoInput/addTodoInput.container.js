@@ -18,7 +18,7 @@ const AddTodoInputContainer = () => {
         event.preventDefault();
         const description = input
         addTodo({ variables: { description }})
-        event.target.value = ''
+        updateInput('')
     }
 
     return (

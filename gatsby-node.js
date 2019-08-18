@@ -27,6 +27,7 @@ exports.createSchemaCustomization = ({ actions }) => {
 
         type Mutation {
             addTodo(todoInput: TodoInput!): Todo
+            removeTodo(id: String!): String
         }
     `
     createTypes(typeDefs)
@@ -81,12 +82,22 @@ exports.createResolvers = ({ createResolvers }) => {
                         });
                 },
             },
+            removeTodo: {
+                type: "String",
+                resolve(source, args, context, info) {
+                    const { id } = args;
+
+                    Todo.find({ _id: id }).remove().exec();
+                    
+                    return `Todo with id ${id} has been removed`
+                },
+            }
         }
     }
     createResolvers(resolvers)
 }
 
 exports.onPreInit = () => {
-    mongoose.connect(`mongodb+srv://<user>:<password>@<cluster>.mongodb.net/<database>?retryWrites=true&w=majority`)
+    mongoose.connect(`mongodb+srv://tupiuser:Tupitupi1@vicluster-j65o8.mongodb.net/gatsby-todo-db?retryWrites=true&w=majority`)
         .catch(err => console.log('Error connecting with mongoDB', err));
 }

@@ -7,7 +7,7 @@ export const getTodosId = () => useQuery(gql`
             _id
         }
     }
-`)
+`);
 
 export const getTodoById = (id) => {
     const QUERY = gql`
@@ -17,15 +17,18 @@ export const getTodoById = (id) => {
                 isChecked
             }
         }
-    `
+    `;
 
-    const data = useQuery(QUERY, { variables: { id } })
+    const data = useQuery(QUERY, { variables: { id } });
 
     return data;
 }
 
-// mutation {
-//     createTodo(todoInput: {description: "Faking event"}) {
-//       description
-//     }
-//   }
+export const ADD_TODO = gql`
+    mutation ($description: String!) {
+        addTodo(todoInput: { description: $description }) {
+            description
+            isChecked
+        }
+    }
+`;

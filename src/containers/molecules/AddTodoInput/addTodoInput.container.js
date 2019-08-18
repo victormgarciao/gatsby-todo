@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import InputWithButton from '../../../components/molecules/InputWithButton/inputWithButton';
-import useGlobal from '../../../store/store';
-import { generateString } from '../../../utils/global';
+import { ADD_TODO } from '../../../queries/todos.queries';
+import { useMutation } from '@apollo/react-hooks';
 
 const AddTodoInputContainer = () => {
-    const [, globalActions] = useGlobal()
 
     const [input, updateInput] = useState('')
 
@@ -13,15 +12,13 @@ const AddTodoInputContainer = () => {
         updateInput(event.target.value);
     };
 
+    const [addTodo, /* { data } */] = useMutation(ADD_TODO);
 
     const handleClick = (event) => {
         event.preventDefault();
-        const newTodo = {
-            description: input,
-            isChecked: false,
-            id: generateString(),
-        }
-        globalActions.addToTodos(newTodo)
+        const description = input
+        addTodo({ variables: { description }})
+        event.target.value = ''
     }
 
     return (

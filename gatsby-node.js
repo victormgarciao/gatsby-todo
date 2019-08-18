@@ -26,7 +26,7 @@ exports.createSchemaCustomization = ({ actions }) => {
         }
 
         type Mutation {
-            createTodo(todoInput: TodoInput!): Todo
+            addTodo(todoInput: TodoInput!): Todo
         }
     `
     createTypes(typeDefs)
@@ -60,7 +60,7 @@ exports.createResolvers = ({ createResolvers }) => {
             }
         },
         Mutation: {
-            createTodo: {
+            addTodo: {
                 type: "Todo",
                 resolve(source, args, context, info) {
                     const { description } = args.todoInput;
@@ -87,6 +87,6 @@ exports.createResolvers = ({ createResolvers }) => {
 }
 
 exports.onPreInit = () => {
-    mongoose.connect(`mongodb+srv://tupiuser:Tupitupi1@vicluster-j65o8.mongodb.net/gatsby-todo-db?retryWrites=true&w=majority`)
+    mongoose.connect(`mongodb+srv://<user>:<password>@<cluster>.mongodb.net/<database>?retryWrites=true&w=majority`)
         .catch(err => console.log('Error connecting with mongoDB', err));
 }

@@ -1,22 +1,20 @@
 import { useQuery } from "@apollo/react-hooks";
 import gql from 'graphql-tag';
 
-export const getTodosData = () => useQuery(gql`
+export const getTodosId = () => useQuery(gql`
     {
-        allMongodbGatsbytododbTodos {
-            nodes {
-                id
-            }
+        todos {
+            _id
         }
     }
 `)
 
-export const getTodoContent = (id) => {
+export const getTodoById = (id) => {
     const QUERY = gql`
-        query MyQuery($id: String!) {
-            mongodbGatsbytododbTodos(id: {eq: $id}) {
-                isChecked
+        query ($id: String!) {
+            todo(id: $id) {
                 description
+                isChecked
             }
         }
     `
@@ -25,3 +23,9 @@ export const getTodoContent = (id) => {
 
     return data;
 }
+
+// mutation {
+//     createTodo(todoInput: {description: "Faking event"}) {
+//       description
+//     }
+//   }

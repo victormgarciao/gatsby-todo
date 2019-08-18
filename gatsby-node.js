@@ -98,6 +98,6 @@ exports.createResolvers = ({ createResolvers }) => {
 }
 
 exports.onPreInit = () => {
-    mongoose.connect(`mongodb+srv://tupiuser:Tupitupi1@vicluster-j65o8.mongodb.net/gatsby-todo-db?retryWrites=true&w=majority`)
+    mongoose.connect(`mongodb+srv://<user>:<password>@vicluster-j65o8.mongodb.net/gatsby-todo-db?retryWrites=true&w=majority`)
         .catch(err => console.log('Error connecting with mongoDB', err));
 }

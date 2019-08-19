@@ -31,6 +31,7 @@ exports.createSchemaCustomization = ({ actions }) => {
         type Mutation {
             addTodo(todoInput: TodoInput!): Todo
             removeTodo(todoId: String!): String
+            tickTodo(isChecked: Boolean!, todoId: String!): Todo
         }
     `
     //     type Subscription {
@@ -100,7 +101,28 @@ exports.createResolvers = ({ createResolvers }) => {
 
                     Todo.find({ todoId: todoId }).remove().exec();
                     
-                    return `Todo with todoId ${todoId} has been removed`
+                    return todoId
+                },
+            },
+            tickTodo: {
+                type: "Todo",
+                resolve(source, args, context, info) {
+                    const { isChecked, todoId } = args;
+
+                    // Todo.find({ todoId: todoId })
+                    //     .then(todosFound => {
+                    //         const todoToUpdate = todosFound[0].isChecked = isChecked
+                    //         todoToUpdate.save()
+                    //     })
+                    //     .catch(err => { throw err; })
+
+                    console.log('::::: todoId ::::::', todoId)
+                    console.log('::::: isChecked ::::::', isChecked)
+
+                    const filter = { todoId: todoId };
+                    const update = { isChecked: isChecked };
+                    return Todo.findOneAndUpdate(filter, update, { new: true })
+                        .catch(err => console.log(err));
                 },
             }
         },

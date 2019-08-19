@@ -7,15 +7,13 @@
 // You can delete this file if you're not using it
 const mongoose = require('mongoose');
 
-const { PubSub } = require('apollo-server');
 
-const pubsub = new PubSub();
 
 exports.createSchemaCustomization = ({ actions }) => {
     const { createTypes } = actions
     const typeDefs = `
         type Todo {
-            _id: ID!
+            id: ID!
             description: String!
             isChecked: Boolean!
         }
@@ -54,7 +52,13 @@ exports.createResolvers = ({ createResolvers }) => {
                     return Todo.find()
                         .then(todos => {
                             return todos.map(todo => {
-                                return { ...todo._doc }
+                                const todoFormatted = {
+                                    id: todo._id,
+                                    description: todo.description,
+                                    isChecked: todo.isChecked
+                                }
+                                
+                                return todoFormatted
                             })
                         })
                         .catch(err => { throw err; })
@@ -64,7 +68,7 @@ exports.createResolvers = ({ createResolvers }) => {
                 type: `Todo!`,
                 resolve(source, args, context, info) {
                     return Todo
-                        .find({ _id: args.id })
+                        .find({ id: args.id })
                         .then(todosFound => todosFound[0])
                         .catch(err => { throw err; })
                 }
@@ -74,18 +78,18 @@ exports.createResolvers = ({ createResolvers }) => {
             addTodo: {
                 type: "Todo",
                 resolve(source, args, context, info) {
-                    const { description } = args.todoInput;
+                    const { description, id } = args.todoInput;
 
                     const todo = new Todo({
                         description,
                         isChecked: false,
+                        id,
                     })
 
                     return todo.save()
                         .then(result => {
                             console.log('save todo succeded', result);
                             const newTodo = {...result._doc}
-                            pubsub.publish(TODO_ADDED, { todoAdded: newTodo })
                             return newTodo
                         })
                         .catch(err => {
@@ -99,27 +103,12 @@ exports.createResolvers = ({ createResolvers }) => {
                 resolve(source, args, context, info) {
                     const { id } = args;
 
-                    Todo.find({ _id: id }).remove().exec();
+                    Todo.find({ id: id }).remove().exec();
                     
                     return `Todo with id ${id} has been removed`
                 },
             }
         },
-        // Subscription: {
-        //     type: "Todo",
-        //     subcribe(source, args, context, info) {
-        //         console.log('::: source :::::', source);
-        //         console.log('::: args :::::', args);
-        //         console.log('::: context :::::', context);
-        //         console.log('::: info :::::', info);
-        //         console.log(':::::::: ???? ::::::::', pubsub.asyncIterator([TODO_ADDED]))
-        //         pubsub.asyncIterator([TODO_ADDED])
-        //     }
-        //     // todoAdded: {
-        //     //     subcribe: () => {
-        //     //     }
-        //     // }
-        // }
     }
     createResolvers(resolvers)
 }

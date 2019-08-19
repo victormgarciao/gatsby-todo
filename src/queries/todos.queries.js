@@ -2,11 +2,11 @@ import { useQuery } from "@apollo/react-hooks";
 import gql from 'graphql-tag';
 
 export const GET_TODOS = gql`
-{
-    todos {
-        _id
+    {
+        todos {
+            id
+        }
     }
-}
 `;
 
 export const getTodosId = () => useQuery(GET_TODOS);
@@ -44,7 +44,7 @@ export const REMOVE_TODO = gql`
 // export const TODO_ADDED_SUBSCRIPTION = gql `
 //     subscription {
 //         todoAdded {
-//             _id
+//             id
 //             description
 //         }
 //     }

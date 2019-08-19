@@ -3,6 +3,7 @@ import InputWithButton from '../../../components/molecules/InputWithButton/input
 import { ADD_TODO, GET_TODOS } from '../../../queries/todos.queries';
 import { useMutation } from '@apollo/react-hooks';
 import { apolloClient } from '../../../utils/apollo';
+import { generateString } from '../../../utils/global';
 
 const AddTodoInputContainer = () => {
 
@@ -13,23 +14,24 @@ const AddTodoInputContainer = () => {
         updateInput(event.target.value);
     };
 
-    const [addTodo, /* { data } */] = useMutation(ADD_TODO)
-    //     ADD_TODO,
-    //     {
-    //         update(cache, { data: { addTodo } }) {
-    //             const { todos } = cache.readQuery({ query: GET_TODOS });
-    //             cache.writeQuery({
-    //                 query: GET_TODOS,
-    //                 data: { todos: todos.concat([addTodo]) },
-    //             });
-    //         }
-    //     }
-    // );
+    const [addTodo, /* { data } */] = useMutation(
+        ADD_TODO,
+        {
+            update(cache, { data: { addTodo } }) {
+                const { todos } = cache.readQuery({ query: GET_TODOS });
+                cache.writeQuery({
+                    query: GET_TODOS,
+                    data: { todos: todos.concat([addTodo]) },
+                });
+            }
+        }
+    );
 
     const handleClick = (event) => {
         event.preventDefault();
         const description = input
-        addTodo({ variables: { description }})
+        const id = generateString()
+        addTodo({ variables: { description, id }})
         updateInput('')
         // apolloClient.cache.writeData({ data: {}})
         console.log(':::: addTodo ::::::', apolloClient.cache)

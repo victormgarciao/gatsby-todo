@@ -9,3 +9,15 @@ export const apolloClient = new ApolloClient({
   cache,
   link,
 })
+
+// const data = {
+//   todos: [{
+//     _id: 'aa1',
+//     description: 'cache test',
+//     isChecked: false,
+//   }],
+// };
+
+// cache.writeData({ data });
+
+// apolloClient.onResetStore(() => cache.writeData({ data }));

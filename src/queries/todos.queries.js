@@ -4,31 +4,31 @@ import gql from 'graphql-tag';
 export const GET_TODOS = gql`
     {
         todos {
-            id
+            todoId
         }
     }
 `;
 
 export const getTodosId = () => useQuery(GET_TODOS);
 
-export const getTodoById = (id) => {
+export const getTodoById = (todoId) => {
     const QUERY = gql`
-        query ($id: String!) {
-            todo(id: $id) {
+        query ($todoId: String!) {
+            todo(todoId: $todoId) {
                 description
                 isChecked
             }
         }
     `;
 
-    const data = useQuery(QUERY, { variables: { id } });
+    const data = useQuery(QUERY, { variables: { todoId } });
 
     return data;
 }
 
 export const ADD_TODO = gql`
-    mutation ($description: String!) {
-        addTodo(todoInput: { description: $description }) {
+    mutation ($description: String!, $todoId: String!) {
+        addTodo(todoInput: { description: $description, todoId: $todoId }) {
             description
             isChecked
         }
@@ -36,15 +36,15 @@ export const ADD_TODO = gql`
 `;
 
 export const REMOVE_TODO = gql`
-    mutation ($id: String!) {
-        removeTodo(id: $id) 
+    mutation ($todoId: String!) {
+        removeTodo(todoId: $todoId) 
     }
 `;
 
 // export const TODO_ADDED_SUBSCRIPTION = gql `
 //     subscription {
 //         todoAdded {
-//             id
+//             todoId
 //             description
 //         }
 //     }

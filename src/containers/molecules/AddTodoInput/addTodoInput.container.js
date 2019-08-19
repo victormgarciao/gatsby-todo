@@ -30,8 +30,8 @@ const AddTodoInputContainer = () => {
     const handleClick = (event) => {
         event.preventDefault();
         const description = input
-        const id = generateString()
-        addTodo({ variables: { description, id }})
+        const todoId = generateString()
+        addTodo({ variables: { description, todoId }})
         updateInput('')
         // apolloClient.cache.writeData({ data: {}})
         console.log(':::: addTodo ::::::', apolloClient.cache)

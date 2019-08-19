@@ -6,8 +6,8 @@ import TodoListItemContainer from '../../../containers/molecules/TodoListItem/to
 import { generateString } from '../../../utils/global';
 
 const TodoList = ({todos}) => {
-  const createTodoListItem = ({ id }) => (
-    <TodoListItemContainer id={id} key={generateString()} />
+  const createTodoListItem = ({ todoId }) => (
+    <TodoListItemContainer todoId={todoId} key={generateString()} />
   )
 
   return (

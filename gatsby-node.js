@@ -13,23 +13,24 @@ exports.createSchemaCustomization = ({ actions }) => {
     const { createTypes } = actions
     const typeDefs = `
         type Todo {
-            id: ID!
+            todoId: String!
             description: String!
             isChecked: Boolean!
         }
 
         input TodoInput {
             description: String!
+            todoId: String!
         }
 
         type Query {
             todos: [Todo!]!
-            todo(id: String!): Todo!
+            todo(todoId: String!): Todo!
         }
 
         type Mutation {
             addTodo(todoInput: TodoInput!): Todo
-            removeTodo(id: String!): String
+            removeTodo(todoId: String!): String
         }
     `
     //     type Subscription {
@@ -52,13 +53,7 @@ exports.createResolvers = ({ createResolvers }) => {
                     return Todo.find()
                         .then(todos => {
                             return todos.map(todo => {
-                                const todoFormatted = {
-                                    id: todo._id,
-                                    description: todo.description,
-                                    isChecked: todo.isChecked
-                                }
-                                
-                                return todoFormatted
+                                return { ...todo._doc }
                             })
                         })
                         .catch(err => { throw err; })
@@ -68,7 +63,7 @@ exports.createResolvers = ({ createResolvers }) => {
                 type: `Todo!`,
                 resolve(source, args, context, info) {
                     return Todo
-                        .find({ id: args.id })
+                        .find({ todoId: args.todoId })
                         .then(todosFound => todosFound[0])
                         .catch(err => { throw err; })
                 }
@@ -78,12 +73,12 @@ exports.createResolvers = ({ createResolvers }) => {
             addTodo: {
                 type: "Todo",
                 resolve(source, args, context, info) {
-                    const { description, id } = args.todoInput;
+                    const { description, todoId } = args.todoInput;
 
                     const todo = new Todo({
                         description,
                         isChecked: false,
-                        id,
+                        todoId,
                     })
 
                     return todo.save()
@@ -101,11 +96,11 @@ exports.createResolvers = ({ createResolvers }) => {
             removeTodo: {
                 type: "String",
                 resolve(source, args, context, info) {
-                    const { id } = args;
+                    const { todoId } = args;
 
-                    Todo.find({ id: id }).remove().exec();
+                    Todo.find({ todoId: todoId }).remove().exec();
                     
-                    return `Todo with id ${id} has been removed`
+                    return `Todo with todoId ${todoId} has been removed`
                 },
             }
         },

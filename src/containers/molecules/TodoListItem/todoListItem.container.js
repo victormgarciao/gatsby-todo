@@ -7,10 +7,10 @@ import TodoListItem from '../../../components/molecules/TodoListItem/todoListIte
 import { getTodoById, REMOVE_TODO } from '../../../queries/todos.queries';
 import { useMutation } from '@apollo/react-hooks';
 
-const TodoListItemContainer = ({ id }) => {
+const TodoListItemContainer = ({ todoId }) => {
   const [, globalActions] = useGlobal()
 
-  const { loading, error, data } = getTodoById(id);
+  const { loading, error, data } = getTodoById(todoId);
 
   const [removeTodo] = useMutation(REMOVE_TODO);
 
@@ -26,9 +26,9 @@ const TodoListItemContainer = ({ id }) => {
 
   
 
-  const tickTodo = () => globalActions.tickTodo(id)
+  const tickTodo = () => globalActions.tickTodo(todoId)
   const removeTodoHandler = () => {
-    removeTodo({ variables: { id } });
+    removeTodo({ variables: { todoId } });
   };
 
   return (
@@ -44,5 +44,5 @@ const TodoListItemContainer = ({ id }) => {
 export default TodoListItemContainer
 
 TodoListItemContainer.propTypes = {
-  id: PropTypes.string.isRequired,
+  todoId: PropTypes.string.isRequired,
 }

@@ -7,7 +7,7 @@
 // You can delete this file if you're not using it
 const mongoose = require('mongoose');
 
-
+const Todo = require('./models/todo');
 
 exports.createSchemaCustomization = ({ actions }) => {
     const { createTypes } = actions
@@ -34,73 +34,46 @@ exports.createSchemaCustomization = ({ actions }) => {
             tickTodo(isChecked: Boolean!, todoId: String!): Todo
         }
     `
-    //     type Subscription {
-    //         todoAdded: Todo
-    //     }
-    // `
     createTypes(typeDefs)
 }
-
-const Todo = require('./models/todo');
-
-const TODO_ADDED = 'TODO_ADDED'
 
 exports.createResolvers = ({ createResolvers }) => {
     const resolvers = {
         Query: {
             todos: {
                 type: `[Todo!]!`,
-                resolve() {
-                    return Todo.find()
-                        .then(todos => {
-                            return todos.map(todo => {
-                                return { ...todo._doc }
-                            })
-                        })
-                        .catch(err => { throw err; })
-                },
+                resolve: () => Todo.find()
+                    .then(todos => todos.map(({ _doc}) => ({ ..._doc })))
+                    .catch(err => { throw err; })
             },
             todo: {
                 type: `Todo!`,
-                resolve(source, args, context, info) {
-                    return Todo
-                        .find({ todoId: args.todoId })
+                resolve: (source, args, context, info) => (
+                    Todo.find({ todoId: args.todoId })
                         .then(todosFound => todosFound[0])
                         .catch(err => { throw err; })
-                }
+                )
             }
         },
         Mutation: {
             addTodo: {
                 type: "Todo",
-                resolve(source, args, context, info) {
+                resolve: (source, args, context, info) => {
                     const { description, todoId } = args.todoInput;
+                    const isChecked = false
 
-                    const todo = new Todo({
-                        description,
-                        isChecked: false,
-                        todoId,
-                    })
+                    const todo = new Todo({ description, isChecked, todoId})
 
                     return todo.save()
-                        .then(result => {
-                            console.log('save todo succeded', result);
-                            const newTodo = {...result._doc}
-                            return newTodo
-                        })
-                        .catch(err => {
-                            console.log('save todo error', err);
-                            throw err;
-                        });
+                        .then(({ _doc }) => ({..._doc}))
+                        .catch(err => { throw err })
                 },
             },
             removeTodo: {
                 type: "String",
-                resolve(source, args, context, info) {
-                    const { todoId } = args;
-
+                resolve: (source, { todoId }, context, info) => {
                     Todo.find({ todoId: todoId }).remove().exec();
-                    
+
                     return todoId
                 },
             },
@@ -109,20 +82,13 @@ exports.createResolvers = ({ createResolvers }) => {
                 resolve(source, args, context, info) {
                     const { isChecked, todoId } = args;
 
-                    // Todo.find({ todoId: todoId })
-                    //     .then(todosFound => {
-                    //         const todoToUpdate = todosFound[0].isChecked = isChecked
-                    //         todoToUpdate.save()
-                    //     })
-                    //     .catch(err => { throw err; })
-
-                    console.log('::::: todoId ::::::', todoId)
-                    console.log('::::: isChecked ::::::', isChecked)
-
                     const filter = { todoId: todoId };
                     const update = { isChecked: isChecked };
-                    return Todo.findOneAndUpdate(filter, update, { new: true })
-                        .catch(err => console.log(err));
+                    
+                    return (
+                        Todo.findOneAndUpdate(filter, update, { new: true })
+                            .catch(err => console.log(err))
+                    )
                 },
             }
         },
@@ -131,6 +97,7 @@ exports.createResolvers = ({ createResolvers }) => {
 }
 
 exports.onPreInit = () => {
-    mongoose.connect(`mongodb+srv://<user>:<password>@vicluster-j65o8.mongodb.net/gatsby-todo-db?retryWrites=true&w=majority`)
+    mongoose.connect(`mongodb+srv://tupiuser:Tupitupi1@vicluster-j65o8.mongodb.net/gatsby-todo-db?retryWrites=true&w=majority`)
+    // mongoose.connect(`mongodb+srv://<user>:<password>@vicluster-j65o8.mongodb.net/gatsby-todo-db?retryWrites=true&w=majority`)
         .catch(err => console.log('Error connecting with mongoDB', err));
 }

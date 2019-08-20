@@ -1,14 +1,11 @@
 import React from 'react'
 import PropTypes from "prop-types"
 
-import useGlobal from '../../../store/store';
-
 import TodoListItem from '../../../components/molecules/TodoListItem/todoListItem'
-import { getTodoById, REMOVE_TODO, GET_TODOS } from '../../../queries/todos.queries';
+import { getTodoById, REMOVE_TODO, GET_TODOS, TICK_TODO, GET_TODO_BY_ID } from '../../../queries/todos.queries';
 import { useMutation } from '@apollo/react-hooks';
 
 const TodoListItemContainer = ({ todoId }) => {
-  const [, globalActions] = useGlobal()
 
   const { loading, error, data } = getTodoById(todoId);
 
@@ -27,28 +24,47 @@ const TodoListItemContainer = ({ todoId }) => {
     }
   );
 
+  const [tickTodo] = useMutation(TICK_TODO,
+    {
+      update(cache, { data: { tickTodo }}) {
+        const { todo } = cache.readQuery({
+          query: GET_TODO_BY_ID,
+          variables: { todoId: tickTodo.todoId }
+        })
+
+        cache.writeQuery({
+          query: GET_TODO_BY_ID,
+          variables: { todoId: tickTodo.todoId },
+          data: {
+            todo: {...todo, isChecked: tickTodo.isChecked}
+          }
+        })
+      }
+    }
+  )
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-  const {
-    todo: { description, isChecked } = {
-      description: '',
-      isChecked: false
-    }
-  } = data
+  const description = data.todo.description
+  const isChecked = data.todo.isChecked
 
-  
-
-  const tickTodo = () => globalActions.tickTodo(todoId)
-  const removeTodoHandler = () => {
+  const tickTodoHanlder = (event) => {
+    event.preventDefault()
+    tickTodo({ variables: { todoId, isChecked: !isChecked } })
+    event.stopPropagation()
+  }
+  const removeTodoHandler = (event) => {
+    event.preventDefault()
     removeTodo({ variables: { todoId } });
+    event.stopPropagation()
   };
 
   return (
     <TodoListItem
       description={description}
       isChecked={isChecked}
-      tickTodo={tickTodo}
+      tickTodo={tickTodoHanlder}
       removeTodo={removeTodoHandler}
     />
   )

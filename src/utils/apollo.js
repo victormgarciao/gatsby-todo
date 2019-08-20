@@ -1,6 +1,13 @@
-import { InMemoryCache, HttpLink, ApolloClient } from "apollo-boost";
+import { InMemoryCache, HttpLink, ApolloClient, defaultDataIdFromObject } from "apollo-boost";
 
-const cache = new InMemoryCache()
+const cache = new InMemoryCache({
+  dataIdFromObject: object => {
+    switch (object.__typename){
+      case 'Todo': return object.todoInput;
+      default: return defaultDataIdFromObject(object)
+    }
+  }
+})
 const link = new HttpLink({
   uri: 'http://localhost:8000/__graphql'
 })
@@ -9,15 +16,3 @@ export const apolloClient = new ApolloClient({
   cache,
   link,
 })
-
-// const data = {
-//   todos: [{
-//     id: 'aa1',
-//     description: 'cache test',
-//     isChecked: false,
-//   }],
-// };
-
-// cache.writeData({ data });
-
-// apolloClient.onResetStore(() => cache.writeData({ data }));

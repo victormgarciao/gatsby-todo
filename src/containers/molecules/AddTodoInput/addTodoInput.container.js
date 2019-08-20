@@ -21,7 +21,7 @@ const AddTodoInputContainer = () => {
                 const { todos } = cache.readQuery({ query: GET_TODOS });
                 cache.writeQuery({
                     query: GET_TODOS,
-                    data: { todos: todos.concat([addTodo]) },
+                    data: { todos: [...todos, addTodo] },
                 });
             }
         }

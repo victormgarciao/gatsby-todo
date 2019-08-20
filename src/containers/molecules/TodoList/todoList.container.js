@@ -14,8 +14,6 @@ const TodoListContainer = () => {
 
     console.log(apolloClient.cache)
 
-    // apolloClient.writeData( { data: todos });
-
     return  <TodoList todos={todos} />
 }
 
